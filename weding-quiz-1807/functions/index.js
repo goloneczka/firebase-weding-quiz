@@ -10,14 +10,9 @@
 const { setGlobalOptions } = require("firebase-functions");
 const { onRequest, onCall } = require("firebase-functions/https");
 const logger = require("firebase-functions/logger");
-const admin = require("firebase-admin");
 
-let db = null;
+const { getQuizById, getQuizzQuestionsById, getQuizQuestionById } = require("./service/quiz-service");
 
-if (admin.apps.length === 0) {
-  admin.initializeApp();
-  db = admin.firestore();
-}
 // For cost control, you can set the maximum number of containers that can be
 // running at the same time. This helps mitigate the impact of unexpected
 // traffic spikes by instead downgrading performance. This limit is a
@@ -33,23 +28,14 @@ setGlobalOptions({ maxInstances: 10 });
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
-exports.helloWorld = onCall(async (req) => {
-  if (!req.auth || !req.auth.uid) {
-    throw new HttpsError("failed-precondition", "The function must be called while authenticated.");
-  }
+exports.getQuiz = onCall(async (req) => {
+  return await getQuizById(req);
+});
 
-  const docId = "RSCBdTq8trDPGhDGcipe";
-  if (!docId) {
-    return { error: "Missing document ID (use ?id=DOC_ID)" };
-  }
+exports.getQuizQuestions = onCall(async (req) => {
+  return await getQuizzQuestionsById(req);
+});
 
-  // Reference your collection, e.g., "users"
-  const docRef = db.collection("quizz").doc(docId);
-  const docSnap = await docRef.get();
-
-  if (!docSnap.exists) {
-    return { error: "Document not found" };
-  }
-
-  return { id: docSnap.id, quiz: docSnap.data() };
+exports.getQuizQuestion = onCall(async (req) => {
+  return await getQuizQuestionById(req);
 });

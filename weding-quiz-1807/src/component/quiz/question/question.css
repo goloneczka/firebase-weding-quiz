@@ -1,0 +1,106 @@
+.wedding-quiz-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fff0f6 0%, #f9e7ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.wedding-quiz-card {
+    background: #fff;
+    border-radius: 2rem;
+    box-shadow: 0 8px 32px rgba(200, 150, 255, 0.15), 0 1.5px 8px #e0c3fc;
+    padding: 2rem 1.5rem;
+    width: 95vw;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+}
+
+.wedding-quiz-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    justify-content: center;
+}
+
+.wedding-ring {
+    font-size: 2rem;
+}
+
+.wedding-quiz-question {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #a16ae8;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.wedding-quiz-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.wedding-quiz-answer {
+    background: #fbeaff;
+    border: 2px solid #e0c3fc;
+    border-radius: 1.2rem;
+    padding: 1rem;
+    font-size: 1.1rem;
+    color: #7f53ac;
+    font-weight: 500;
+    transition: all 0.2s;
+    cursor: pointer;
+    outline: none;
+}
+
+.wedding-quiz-answer.selected,
+.wedding-quiz-answer:active {
+    background: linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%);
+    color: #fff;
+    border-color: #a16ae8;
+    box-shadow: 0 2px 12px #e0c3fc55;
+}
+
+.wedding-quiz-next-btn {
+    margin-top: 1.5rem;
+    background: linear-gradient(90deg, #a16ae8 0%, #f9e7ff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 1.2rem;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 2px 12px #e0c3fc55;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    letter-spacing: 0.03em;
+}
+
+.wedding-quiz-next-btn:disabled {
+    background: #e0c3fc;
+    color: #fff;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .wedding-quiz-card {
+        padding: 1.2rem 0.5rem;
+        border-radius: 1.2rem;
+    }
+
+    .wedding-quiz-question {
+        font-size: 1.1rem;
+    }
+
+    .wedding-quiz-answer,
+    .wedding-quiz-next-btn {
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+}
