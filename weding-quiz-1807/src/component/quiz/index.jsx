@@ -17,15 +17,6 @@ export const QuizContainer = () => {
     });
   }, []);
 
-  useEffect(() => {
-    httpsCallable(
-      getFunctions(),
-      "getQuizQuestions"
-    )(uuid).then((restult) => {
-      console.log(restult);
-    });
-  }, []);
-
   return (
     <div>
       <p>QuizContainer</p>

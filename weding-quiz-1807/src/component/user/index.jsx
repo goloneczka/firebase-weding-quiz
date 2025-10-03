@@ -1,12 +1,8 @@
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { useEffect } from "react";
+import { AuthorizedUser } from "./loged-user";
+import { UserToAuthorize } from "./user-to-authorize";
 
-export const LoggedUserContainer = () => {
-  useEffect(() => {
-    httpsCallable(getFunctions(), "helloWorld")().then((restult) => {
-      console.log(restult);
-    });
-  }, []);
+export const UserContainer = () => {
+  const isLoggedIn = !!localStorage.getItem("auth");
 
-  return <div>QuizContainer</div>;
+  return <>{isLoggedIn ? <AuthorizedUser /> : <UserToAuthorize />}</>;
 };
