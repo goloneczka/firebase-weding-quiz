@@ -1,25 +1,61 @@
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import "./question.css";
 
 export const QuizQuestionContainer = () => {
   const { uuid, page } = useParams();
+  const navigate = useNavigate();
+  const startTimeRef = useRef(null);
 
   const [questionData, setQuestionData] = useState({});
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
+    const prevAnswers = JSON.parse(localStorage.getItem("quiz") || "{}");
+    const intPage = parseInt(page, 10);
+    if (prevAnswers[intPage]) {
+      setSelected(prevAnswers[intPage].answer);
+    } else if (intPage !== 1 && !prevAnswers[intPage - 1]) {
+      localStorage.removeItem("quiz");
+      navigate(`/quiz/${uuid}/page/1`);
+      return;
+    } else {
+      setSelected(null);
+    }
+
     httpsCallable(
       getFunctions(),
       "getQuizQuestion"
     )({ quizId: uuid, questionNumber: page }).then((restult) => {
       setQuestionData(restult.data);
+      startTimeRef.current = Date.now();
     });
   }, [uuid, page]);
 
   const handleSelect = (idx) => setSelected(idx);
+
+  const handleNextQuestion = () => {
+    const timePassed = (Date.now() - startTimeRef.current) / 1000; // seconds
+
+    const prevAnswers = JSON.parse(localStorage.getItem("quiz") || "{}");
+    prevAnswers[page] = { answer: selected, t: timePassed };
+    localStorage.setItem("quiz", JSON.stringify(prevAnswers));
+
+    if (questionData.isLast) {
+      return httpsCallable(
+        getFunctions(),
+        "submitQuiz"
+      )({ quizId: uuid, answers: prevAnswers }).finally(() => {
+        navigate(`/quiz/${uuid}/end`);
+        localStorage.removeItem("quiz");
+        return;
+      });
+    }
+    const nextPage = parseInt(page, 10) + 1;
+    navigate(`/quiz/${uuid}/page/${nextPage}`);
+  };
 
   return (
     <div className="wedding-quiz-container">
@@ -36,7 +72,7 @@ export const QuizQuestionContainer = () => {
             </button>
           ))}
         </div>
-        <button className="wedding-quiz-next-btn" disabled={selected === null}>
+        <button className="wedding-quiz-next-btn" disabled={selected === null} onClick={handleNextQuestion}>
           Next Question
         </button>
       </div>

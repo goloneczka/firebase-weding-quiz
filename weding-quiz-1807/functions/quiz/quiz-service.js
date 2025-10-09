@@ -1,16 +1,10 @@
 import { HttpsError } from "firebase-functions/https";
 import { admin } from "../firebase.js";
-import { getFirestore, collection, doc, query, where, getDocs } from "firebase/firestore";
 
 export const db = admin.firestore();
 
 export const getQuizById = async (req) => {
-  if (!req.auth || !req.auth.uid) {
-    throw new HttpsError("failed-precondition", "The function must be called while authenticated.");
-  }
-
   const docId = req.data;
-  console.log("req: ", req.auth);
   if (!docId) {
     return { error: "Missing document ID (use ?id=DOC_ID)" };
   }
@@ -21,38 +15,36 @@ export const getQuizById = async (req) => {
     return { error: "Document not found" };
   }
 
-  const docData = docSnap.data();
-  if (docData.owner !== req.auth.email) {
-    throw new HttpsError("failed-condition", "user must be owner of the quiz");
-  }
-
   return { id: docSnap.id, ...docSnap.data() };
 };
 
-export const getQuizzQuestionsById = async (req) => {
+export const getQuizByOwner = async (req) => {
   if (!req.auth || !req.auth.uid) {
     throw new HttpsError("failed-precondition", "The function must be called while authenticated.");
   }
 
-  const quizzRef = db.collection("quizz").doc(req.data);
+  const ownerEmail = req.data;
+  if (!ownerEmail) {
+    return { error: "Missing document ID (use ?id=DOC_ID)" };
+  }
 
-  const questionsRef = db.collection("question").where("quiz", "==", quizzRef);
-  const querySnapshot = await questionsRef.get();
+  const querySnap = await db.collection("quizz").where("owner", "==", ownerEmail).get();
+  if (querySnap.empty) {
+    return { error: "Document not found" };
+  }
 
-  return querySnapshot.docs.map((doc) => {
-    const { quiz, ...rest } = doc.data(); // usuń quiz z wyniku
-    return {
-      id: doc.id,
-      ...rest,
-    };
-  });
+  // If you expect only one quiz per owner, just take the first doc
+  const docSnap = querySnap.docs[0];
+  const docData = docSnap.data();
+
+  if (docData.owner !== req.auth.token.email) {
+    throw new HttpsError("failed-condition", "user must be owner of the quiz");
+  }
+
+  return { id: docSnap.id, ...docData };
 };
 
 export const getQuizQuestionById = async (req) => {
-  if (!req.auth || !req.auth.uid) {
-    throw new HttpsError("failed-precondition", "The function must be called while authenticated.");
-  }
-
   const docId = req.data.quizId;
   const no = Number(req.data.questionNumber);
 
@@ -66,4 +58,30 @@ export const getQuizQuestionById = async (req) => {
     id: doc.id,
     ...rest,
   };
+};
+
+export const submitQuiz = async (req) => {
+  const docId = req.data.quizId;
+  const answers = req.data.answers;
+  let points = 0;
+  let totalTime = 0;
+
+  const quizzRef = db.collection("quizz").doc(docId);
+  const questionsRef = db.collection("question").where("quiz", "==", quizzRef);
+  const querySnapshot = await questionsRef.get();
+
+  querySnapshot.docs.forEach((question) => {
+    const qData = question.data();
+    const userAnswer = answers[qData.no];
+    points += userAnswer?.answer === qData.correctAnswer ? 1 : 0;
+    totalTime += userAnswer?.t || 0;
+  });
+
+  await db.collection("quiz_results").add({
+    quiz: quizzRef,
+    points,
+    totalTime,
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+  });
+  return;
 };

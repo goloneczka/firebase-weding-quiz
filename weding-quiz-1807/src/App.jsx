@@ -5,6 +5,7 @@ import "./App.css";
 import { UserContainer } from "./component/user";
 import { QuizContainer } from "./component/quiz";
 import { QuizQuestionContainer } from "./component/quiz/question";
+import { QuizEndView } from "./component/quiz/end-quiz";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -16,7 +17,8 @@ function App() {
           <Route path="/" exact element={<Auth />} />
           <Route path="/user" element={<UserContainer />} />
           <Route path="/quiz/:uuid" element={<QuizContainer />} />
-          <Route path="/quiz/:uuid/page/:page" element={<QuizQuestionContainer />} /> {/* new route */}
+          <Route path="/quiz/:uuid/page/:page" element={<QuizQuestionContainer />} />
+          <Route path="/quiz/:uuid/end" element={<QuizEndView />} />
         </Routes>
       </Router>
     </div>

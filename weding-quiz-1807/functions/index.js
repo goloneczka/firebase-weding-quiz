@@ -11,7 +11,7 @@ const { setGlobalOptions } = require("firebase-functions");
 const { onRequest, onCall } = require("firebase-functions/https");
 const logger = require("firebase-functions/logger");
 
-const { getQuizById, getQuizzQuestionsById, getQuizQuestionById } = require("./service/quiz-service");
+const { getQuizById, getQuizByOwner, getQuizQuestionById, submitQuiz } = require("./quiz/quiz-service");
 
 // For cost control, you can set the maximum number of containers that can be
 // running at the same time. This helps mitigate the impact of unexpected
@@ -32,10 +32,14 @@ exports.getQuiz = onCall(async (req) => {
   return await getQuizById(req);
 });
 
-exports.getQuizQuestions = onCall(async (req) => {
-  return await getQuizzQuestionsById(req);
+exports.getQuizByOwner = onCall(async (req) => {
+  return await getQuizByOwner(req);
 });
 
 exports.getQuizQuestion = onCall(async (req) => {
   return await getQuizQuestionById(req);
+});
+
+exports.submitQuiz = onCall(async (req) => {
+  return await submitQuiz(req);
 });
