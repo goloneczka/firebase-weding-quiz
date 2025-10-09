@@ -2,9 +2,10 @@ import { auth } from "../../config/firebase-config";
 import { signOut } from "firebase/auth";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { useEffect, useState } from "react";
+import storageService from "../../service/local-storage-service";
 
 export const AuthorizedUser = () => {
-  const user = JSON.parse(localStorage.getItem("auth"));
+  const user = storageService.getAuthUser();
 
   const [quizData, setQuizData] = useState({});
 
@@ -19,7 +20,7 @@ export const AuthorizedUser = () => {
 
   async function logout() {
     await signOut(auth);
-    localStorage.removeItem("auth");
+    storageService.clearUserAuth();
     window.location.reload();
   }
 

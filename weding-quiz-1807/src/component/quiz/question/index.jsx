@@ -2,6 +2,8 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { storageService } from "../../../service/local-storage-service";
+
 import "./question.css";
 
 export const QuizQuestionContainer = () => {
@@ -13,14 +15,16 @@ export const QuizQuestionContainer = () => {
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    const prevAnswers = JSON.parse(localStorage.getItem("quiz") || "{}");
     const intPage = parseInt(page, 10);
+    if (!storageService.validateCurrentQuestion(intPage)) {
+      storageService.clearQuiz();
+      navigate(`/quiz/${uuid}`);
+      return;
+    }
+
+    const prevAnswers = storageService.getQuizAnswersOrEmpty();
     if (prevAnswers[intPage]) {
       setSelected(prevAnswers[intPage].answer);
-    } else if (intPage !== 1 && !prevAnswers[intPage - 1]) {
-      localStorage.removeItem("quiz");
-      navigate(`/quiz/${uuid}/page/1`);
-      return;
     } else {
       setSelected(null);
     }
@@ -39,9 +43,9 @@ export const QuizQuestionContainer = () => {
   const handleNextQuestion = () => {
     const timePassed = (Date.now() - startTimeRef.current) / 1000; // seconds
 
-    const prevAnswers = JSON.parse(localStorage.getItem("quiz") || "{}");
+    const prevAnswers = storageService.getQuizAnswersOrEmpty();
     prevAnswers[page] = { answer: selected, t: timePassed };
-    localStorage.setItem("quiz", JSON.stringify(prevAnswers));
+    storageService.setQuizAnswers(prevAnswers);
 
     if (questionData.isLast) {
       return httpsCallable(
@@ -49,7 +53,7 @@ export const QuizQuestionContainer = () => {
         "submitQuiz"
       )({ quizId: uuid, answers: prevAnswers }).finally(() => {
         navigate(`/quiz/${uuid}/end`);
-        localStorage.removeItem("quiz");
+        storageService.clearQuiz();
         return;
       });
     }

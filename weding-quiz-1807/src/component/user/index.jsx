@@ -1,8 +1,9 @@
+import storageService from "../../service/local-storage-service";
 import { AuthorizedUser } from "./loged-user";
 import { UserToAuthorize } from "./user-to-authorize";
 
 export const UserContainer = () => {
-  const isLoggedIn = !!localStorage.getItem("auth");
+  const isLoggedIn = storageService.validateUserAuth();
 
   return <>{isLoggedIn ? <AuthorizedUser /> : <UserToAuthorize />}</>;
 };
