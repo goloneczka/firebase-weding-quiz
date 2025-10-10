@@ -21,6 +21,10 @@ export const storageService = {
     localStorage.setItem("participant", name);
   },
 
+  getParticipant() {
+    return localStorage.getItem("participant");
+  },
+
   clearQuiz() {
     localStorage.removeItem("quizAnswers");
     localStorage.removeItem("participant");

@@ -1,5 +1,5 @@
 import storageService from "../../service/local-storage-service";
-import { AuthorizedUser } from "./loged-user";
+import { AuthorizedUser } from "./logged/loged-user";
 import { UserToAuthorize } from "./user-to-authorize";
 
 export const UserContainer = () => {

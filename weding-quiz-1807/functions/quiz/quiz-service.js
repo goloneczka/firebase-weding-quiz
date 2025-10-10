@@ -28,20 +28,27 @@ export const getQuizByOwner = async (req) => {
     return { error: "Missing document ID (use ?id=DOC_ID)" };
   }
 
-  const querySnap = await db.collection("quizz").where("owner", "==", ownerEmail).get();
+  const quizRef = db.collection("quizz").where("owner", "==", ownerEmail);
+  const querySnap = await quizRef.get();
   if (querySnap.empty) {
     return { error: "Document not found" };
   }
 
   // If you expect only one quiz per owner, just take the first doc
-  const docSnap = querySnap.docs[0];
-  const docData = docSnap.data();
+  const quizSnap = querySnap.docs[0];
+  const quizData = quizSnap.data();
 
-  if (docData.owner !== req.auth.token.email) {
+  if (quizData.owner !== req.auth.token.email) {
     throw new HttpsError("failed-condition", "user must be owner of the quiz");
   }
 
-  return { id: docSnap.id, ...docData };
+  const answersSnap = await db.collection("quiz_results").where("quiz", "==", quizSnap.ref).get();
+  const answersData = answersSnap.docs.map((doc) => {
+    const { quiz, ...rest } = doc.data();
+    return { id: doc.id, ...rest };
+  });
+
+  return { quiz: { id: quizSnap.id, ...quizData }, answers: answersData };
 };
 
 export const getQuizQuestionById = async (req) => {
@@ -81,6 +88,7 @@ export const submitQuiz = async (req) => {
     quiz: quizzRef,
     points,
     totalTime,
+    participant: req.data.user,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
   });
   return;

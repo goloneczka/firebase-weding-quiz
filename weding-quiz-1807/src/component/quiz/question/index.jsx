@@ -46,12 +46,13 @@ export const QuizQuestionContainer = () => {
     const prevAnswers = storageService.getQuizAnswersOrEmpty();
     prevAnswers[page] = { answer: selected, t: timePassed };
     storageService.setQuizAnswers(prevAnswers);
+    const user = storageService.getParticipant();
 
     if (questionData.isLast) {
       return httpsCallable(
         getFunctions(),
         "submitQuiz"
-      )({ quizId: uuid, answers: prevAnswers }).finally(() => {
+      )({ quizId: uuid, answers: prevAnswers, user }).finally(() => {
         navigate(`/quiz/${uuid}/end`);
         storageService.clearQuiz();
         return;
