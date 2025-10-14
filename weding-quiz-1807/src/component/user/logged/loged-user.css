@@ -1,0 +1,143 @@
+/* Mobile-first modern layout for AuthorizedUser */
+
+.lu-root {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #fff7fb 0%, #fffaf6 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: #3a2b4a;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.lu-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(128, 88, 200, 0.06);
+    margin-bottom: 12px;
+    border: 1px solid rgba(161, 106, 232, 0.06);
+}
+
+.lu-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lu-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #a16ae8, #8ec5fc);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(142, 197, 252, 0.08);
+    flex-shrink: 0;
+}
+
+.lu-user-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.lu-user-mail {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #3a2b4a;
+}
+
+.lu-user-sub {
+    font-size: 0.78rem;
+    color: #7b6b8a;
+}
+
+/* logout */
+.lu-logout {
+    background: transparent;
+    border: 1px solid rgba(124, 90, 171, 0.12);
+    color: #7f53ac;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* content */
+.lu-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* main card */
+.lu-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 10px 30px rgba(161, 106, 232, 0.06);
+    border: 1px solid rgba(161, 106, 232, 0.06);
+}
+
+.lu-title {
+    margin: 0 0 12px 0;
+    font-size: 1.1rem;
+    color: #7f53ac;
+    text-align: center;
+}
+
+/* actions */
+.lu-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.lu-btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(124, 90, 171, 0.08);
+    background: linear-gradient(180deg, #fff, #fbf7ff);
+    color: #6b5b7a;
+    font-weight: 700;
+    min-width: 110px;
+    cursor: pointer;
+}
+
+.lu-btn-primary {
+    background: linear-gradient(90deg, #a16ae8 0%, #8ec5fc 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 8px 24px rgba(161, 106, 232, 0.08);
+}
+
+
+/* responsive */
+@media (min-width: 640px) {
+    .lu-root {
+        padding: 20px;
+    }
+
+    .lu-card {
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    .lu-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+    }
+
+    .lu-info-grid {
+        gap: 12px;
+    }
+}
