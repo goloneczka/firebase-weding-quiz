@@ -1,7 +1,20 @@
 import { HttpsError } from "firebase-functions/https";
 import { admin } from "../firebase.js";
 
-export const db = admin.firestore();
+const db = admin.firestore();
+
+const toDate = (ts) => {
+  if (!ts) return null;
+  if (typeof ts.toDate === "function") return ts.toDate();
+  if (ts._seconds != null) {
+    const seconds = Number(ts._seconds) || 0;
+    const nanos = Number(ts._nanoseconds) || 0;
+    return new Date(seconds * 1000 + Math.floor(nanos / 1e6));
+  }
+  // if it's a plain number assume milliseconds
+  if (typeof ts === "number") return new Date(ts);
+  return null;
+};
 
 export const getQuizById = async (req) => {
   const docId = req.data;
@@ -15,7 +28,15 @@ export const getQuizById = async (req) => {
     return { error: "Document not found" };
   }
 
-  return { id: docSnap.id, ...docSnap.data() };
+  const quizData = docSnap.data();
+  const start = toDate(quizData.startTime);
+  const end = toDate(quizData.endTime);
+  const now = new Date();
+  if (!(req.auth && req.auth.token.email === quizData.owner) && (!start || !end || now < start || now > end)) {
+    throw new HttpsError("failed-precondition", "The function must be called while authenticated or during the quiz active time window.");
+  }
+
+  return { id: docSnap.id, ...quizData };
 };
 
 export const getQuizByOwner = async (req) => {
@@ -38,6 +59,7 @@ export const getQuizByOwner = async (req) => {
   const quizSnap = querySnap.docs[0];
   const quizData = quizSnap.data();
 
+  console.log("Quiz data:", req.auth.token.email, quizData.owner);
   if (quizData.owner !== req.auth.token.email) {
     throw new HttpsError("failed-condition", "user must be owner of the quiz");
   }
@@ -59,6 +81,14 @@ export const getQuizQuestionById = async (req) => {
   const questionsRef = db.collection("question").where("quiz", "==", quizzRef).where("no", "==", no);
   const querySnapshot = await questionsRef.get();
 
+  const docQuizSnap = await quizzRef.get();
+  const quizData = docQuizSnap.data();
+  const start = toDate(quizData.startTime);
+  const end = toDate(quizData.endTime);
+  const now = new Date();
+  if (!(req.auth && req.auth.token.email === quizData.owner) && (!start || !end || now < start || now > end)) {
+    throw new HttpsError("failed-precondition", "The function must be called while authenticated or during the quiz active time window.");
+  }
   const doc = querySnapshot.docs[0];
   const { quiz, ...rest } = doc.data();
   return {

@@ -3,10 +3,9 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { storageService } from "../../../service/local-storage-service";
+import { QuizQuestionShared } from "../shared/quiz-question";
 
-import "./question.css";
-
-export const QuizQuestionContainer = () => {
+export const QuizQuestionNotLogged = () => {
   const { uuid, page } = useParams();
   const navigate = useNavigate();
   const startTimeRef = useRef(null);
@@ -62,25 +61,5 @@ export const QuizQuestionContainer = () => {
     navigate(`/quiz/${uuid}/page/${nextPage}`);
   };
 
-  return (
-    <div className="wedding-quiz-container">
-      <div className="wedding-quiz-card">
-        <div className="wedding-quiz-header">
-          <span className="wedding-ring">💍</span>
-          <h2>Quiz Question {questionData.no}</h2>
-        </div>
-        <div className="wedding-quiz-question">{questionData.text}</div>
-        <div className="wedding-quiz-answers">
-          {(questionData.answers || []).map((ans, idx) => (
-            <button key={idx} className={`wedding-quiz-answer${selected === idx ? " selected" : ""}`} onClick={() => handleSelect(idx)}>
-              {ans}
-            </button>
-          ))}
-        </div>
-        <button className="wedding-quiz-next-btn" disabled={selected === null} onClick={handleNextQuestion}>
-          Next Question
-        </button>
-      </div>
-    </div>
-  );
+  return <QuizQuestionShared questionData={questionData} selected={selected} handleSelect={handleSelect} handleNextQuestion={handleNextQuestion} />;
 };

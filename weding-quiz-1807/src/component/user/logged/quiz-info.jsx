@@ -90,6 +90,7 @@ export const QuizInfo = ({ quizData }) => {
           <div className="wedding-countdown">{weddingCountdown}</div>
         </div>
       </div>
+      <p> Jako wlasciciel możesz wejść do quizu w kazdym momencie</p>
     </div>
   );
 };
