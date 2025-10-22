@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { browserSessionPersistence, getAuth, GoogleAuthProvider, setPersistence } from "firebase/auth";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+import { getStorage, ref } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,3 +26,5 @@ export const provider = new GoogleAuthProvider();
 if (process.env.NODE_ENV === "development") {
   connectFunctionsEmulator(getFunctions(app), "localhost", 5001);
 }
+
+export const storage = getStorage(app);

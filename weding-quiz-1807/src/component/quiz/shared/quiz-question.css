@@ -1,6 +1,36 @@
+.photo-container-with-variable-bg {
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.5s ease-in-out;
+    position: relative;
+    /* needed for overlay pseudo-element */
+}
+
+/* overlay that fades image in from top (transparent) to almost hidden at bottom */
+.photo-container-with-variable-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* adjust the stops and alpha to taste */
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0) 0%,
+            /* fully transparent at very top */
+            rgba(255, 255, 255, 0.08) 25%,
+            /* very faint reveal */
+            rgba(255, 255, 255, 0.25) 50%,
+            /* more overlay */
+            rgba(255, 255, 255, 0.9) 100%
+            /* almost completely covered at bottom */
+        );
+    transition: opacity 0.4s ease;
+}
+
 .wedding-quiz-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #fff0f6 0%, #f9e7ff 100%);
+    /* background: linear-gradient(135deg, #fff0f6 0%, #f9e7ff 100%); */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,7 +38,7 @@
 }
 
 .wedding-quiz-card {
-    background: #fff;
+    /* background: #fff; */
     border-radius: 2rem;
     box-shadow: 0 8px 32px rgba(200, 150, 255, 0.15), 0 1.5px 8px #e0c3fc;
     padding: 2rem 1.5rem;
