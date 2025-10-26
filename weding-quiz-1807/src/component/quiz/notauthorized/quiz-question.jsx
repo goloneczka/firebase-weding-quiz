@@ -17,8 +17,14 @@ export const QuizQuestionNotLogged = () => {
 
   const [bgPhotoUrl, setBgPhotoUrl] = useState("");
 
-  const fetchCustomImage = () => {
-    const imageRef = ref(storage, `pj-mg-2706/29b9cd76-4e59-4ec8-b2fe-fc1208e1e4e5.jfif`);
+  const fetchCustomImage = (imageOrBucketPath) => {
+    if (imageOrBucketPath.endsWith("/")) {
+      const basePath = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL;
+      const bgUrl = `${basePath}/image/${imageOrBucketPath}default.png`;
+      setBgPhotoUrl(bgUrl);
+      return;
+    }
+    const imageRef = ref(storage, imageOrBucketPath);
     getDownloadURL(imageRef).then((url) => {
       setBgPhotoUrl(url);
     });
@@ -44,8 +50,8 @@ export const QuizQuestionNotLogged = () => {
       "getQuizQuestion"
     )({ quizId: uuid, questionNumber: page }).then((restult) => {
       setQuestionData(restult.data);
-      fetchCustomImage();
       startTimeRef.current = Date.now();
+      fetchCustomImage(restult.data.imageOrBucketPath);
     });
   }, [uuid, page]);
 

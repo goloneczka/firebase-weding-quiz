@@ -1,5 +1,6 @@
 import { HttpsError } from "firebase-functions/https";
 import { admin } from "../firebase.js";
+import { getRandomImageNameByBucket } from "../storage/storage-service.js";
 
 const db = admin.firestore();
 
@@ -90,10 +91,12 @@ export const getQuizQuestionById = async (req) => {
     throw new HttpsError("failed-precondition", "The function must be called while authenticated or during the quiz active time window.");
   }
   const doc = querySnapshot.docs[0];
+  const imageOrBucketPath = await getRandomImageNameByBucket(quizData.storage);
   const { quiz, ...rest } = doc.data();
   return {
     id: doc.id,
     ...rest,
+    imageOrBucketPath,
   };
 };
 

@@ -4,6 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { storageService } from "../../../service/local-storage-service";
 import { QuizQuestionShared } from "../shared/quiz-question";
+import { getDownloadURL, ref } from "firebase/storage";
+import { storage } from "../../../config/firebase-config";
+
+import "./admin-question.css";
 
 export const QuizQuestionLogged = () => {
   const { uuid, page } = useParams();
@@ -12,6 +16,21 @@ export const QuizQuestionLogged = () => {
 
   const [questionData, setQuestionData] = useState({});
   const [selected, setSelected] = useState(null);
+
+  const [bgPhotoUrl, setBgPhotoUrl] = useState("");
+
+  const fetchCustomImage = (imageOrBucketPath) => {
+    if (imageOrBucketPath.endsWith("/")) {
+      const basePath = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL;
+      const bgUrl = `${basePath}/image/${imageOrBucketPath}default.png`;
+      setBgPhotoUrl(bgUrl);
+      return;
+    }
+    const imageRef = ref(storage, imageOrBucketPath);
+    getDownloadURL(imageRef).then((url) => {
+      setBgPhotoUrl(url);
+    });
+  };
 
   useEffect(() => {
     const intPage = parseInt(page, 10);
@@ -34,6 +53,7 @@ export const QuizQuestionLogged = () => {
     )({ quizId: uuid, questionNumber: page }).then((restult) => {
       setQuestionData(restult.data);
       startTimeRef.current = Date.now();
+      fetchCustomImage(restult.data.imageOrBucketPath);
     });
   }, [uuid, page]);
 
@@ -55,5 +75,16 @@ export const QuizQuestionLogged = () => {
     navigate(`/quiz/${uuid}/page/${nextPage}`);
   };
 
-  return <QuizQuestionShared questionData={questionData} selected={selected} handleSelect={handleSelect} handleNextQuestion={handleNextQuestion} />;
+  return (
+    <div className="admin-container">
+      <div className="admin-flag">Twoje odpowiedzi nie będą zapisane</div>
+      <QuizQuestionShared
+        questionData={questionData}
+        selected={selected}
+        handleSelect={handleSelect}
+        handleNextQuestion={handleNextQuestion}
+        bgPhotoUrl={bgPhotoUrl}
+      />
+    </div>
+  );
 };

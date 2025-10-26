@@ -1,136 +1,246 @@
-.photo-container-with-variable-bg {
-    width: 100%;
-    height: 100vh;
-    background-size: cover;
-    background-position: center;
-    transition: background-image 0.5s ease-in-out;
-    position: relative;
-    /* needed for overlay pseudo-element */
+:root{
+  --azure: #00a8ff;
+  --azure-dark: #0077cc;
+  --gold: #d4af37;
+  --glass-bg: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.12);
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.8);
+  --blur: 10px;
+  --card-radius: 16px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/* overlay that fades image in from top (transparent) to almost hidden at bottom */
-.photo-container-with-variable-bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    /* adjust the stops and alpha to taste */
-    background: linear-gradient(to bottom,
-            rgba(255, 255, 255, 0) 0%,
-            /* fully transparent at very top */
-            rgba(255, 255, 255, 0.08) 25%,
-            /* very faint reveal */
-            rgba(255, 255, 255, 0.25) 50%,
-            /* more overlay */
-            rgba(255, 255, 255, 0.9) 100%
-            /* almost completely covered at bottom */
-        );
-    transition: opacity 0.4s ease;
+.qq-bg{
+  min-height: 100vh;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  position: relative;
+  overflow: hidden;
 }
 
-.wedding-quiz-container {
-    min-height: 100vh;
-    /* background: linear-gradient(135deg, #fff0f6 0%, #f9e7ff 100%); */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 0;
+/* subtle dark gradient overlay to ensure contrast */
+.qq-bg::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 100%);
+  z-index: 0;
 }
 
-.wedding-quiz-card {
-    /* background: #fff; */
-    border-radius: 2rem;
-    box-shadow: 0 8px 32px rgba(200, 150, 255, 0.15), 0 1.5px 8px #e0c3fc;
-    padding: 2rem 1.5rem;
-    width: 95vw;
-    max-width: 420px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1.5rem;
+/* translucent overlay container for centering */
+.qq-overlay{
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.wedding-quiz-header {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    justify-content: center;
+/* glassmorphism card */
+.qq-card{
+  width: 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+  border-radius: var(--card-radius);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur)) saturate(120%);
+  padding: 28px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-.wedding-ring {
-    font-size: 2rem;
+/* header */
+.qq-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
 }
 
-.wedding-quiz-question {
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: #a16ae8;
-    text-align: center;
-    margin-bottom: 0.5rem;
+.qq-title-left{
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.wedding-quiz-answers {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.qq-ring{
+  font-size: 34px;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.6));
 }
 
-.wedding-quiz-answer {
-    background: #fbeaff;
-    border: 2px solid #e0c3fc;
-    border-radius: 1.2rem;
-    padding: 1rem;
-    font-size: 1.1rem;
-    color: #7f53ac;
-    font-weight: 500;
-    transition: all 0.2s;
-    cursor: pointer;
-    outline: none;
+/* title text */
+.qq-title-text h2{
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: -0.2px;
+  color: var(--text);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
-.wedding-quiz-answer.selected,
-.wedding-quiz-answer:active {
-    background: linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%);
-    color: #fff;
-    border-color: #a16ae8;
-    box-shadow: 0 2px 12px #e0c3fc55;
+.qq-no{
+  color: var(--azure);
+  font-weight: 700;
+  font-size: 16px;
 }
 
-.wedding-quiz-next-btn {
-    margin-top: 1.5rem;
-    background: linear-gradient(90deg, #a16ae8 0%, #f9e7ff 100%);
-    color: #fff;
-    border: none;
-    border-radius: 1.2rem;
-    padding: 1rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    box-shadow: 0 2px 12px #e0c3fc55;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-    letter-spacing: 0.03em;
+/* progress */
+.qq-progress{
+  margin-top: 8px;
+  width: 220px;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
 }
 
-.wedding-quiz-next-btn:disabled {
-    background: #e0c3fc;
-    color: #fff;
-    opacity: 0.7;
-    cursor: not-allowed;
+.qq-progress-bar{
+  height: 100%;
+  background: linear-gradient(90deg, var(--azure), var(--azure-dark));
+  box-shadow: 0 4px 18px rgba(0,168,255,0.25);
+  transition: width 360ms ease;
 }
 
-@media (max-width: 600px) {
-    .wedding-quiz-card {
-        padding: 1.2rem 0.5rem;
-        border-radius: 1.2rem;
-    }
+/* small badge */
+.qq-badge{
+  background: linear-gradient(90deg, rgba(212,175,55,0.12), rgba(212,175,55,0.06));
+  border: 1px solid rgba(212,175,55,0.18);
+  color: var(--gold);
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  text-transform: uppercase;
+}
 
-    .wedding-quiz-question {
-        font-size: 1.1rem;
-    }
+/* question body */
+.qq-body{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-    .wedding-quiz-answer,
-    .wedding-quiz-next-btn {
-        font-size: 1rem;
-        padding: 0.8rem;
-    }
+.qq-question{
+  font-size: 20px;
+  line-height: 1.35;
+  color: var(--text);
+  font-weight: 600;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+}
+
+/* answers */
+.qq-answers{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.qq-answer{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--muted);
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  text-align: left;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+.qq-answer:hover{
+  transform: translateY(-4px);
+  color: #fff;
+  border-color: rgba(0,168,255,0.9);
+  box-shadow: 0 10px 30px rgba(0,168,255,0.12);
+}
+
+.qq-answer:focus{
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0,168,255,0.12);
+}
+
+.qq-answer-index{
+  min-width: 36px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(0,168,255,0.14), rgba(0,119,204,0.08));
+  color: var(--azure);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 -2px 6px rgba(0,0,0,0.25);
+}
+
+/* selected state with gold accent */
+.qq-answer.selected{
+  background: linear-gradient(90deg, rgba(212,175,55,0.08), rgba(212,175,55,0.04));
+  border: 1px solid rgba(212,175,55,0.9);
+  color: #fff;
+  box-shadow: 0 12px 40px rgba(212,175,55,0.12), 0 2px 10px rgba(0,0,0,0.45);
+  transform: translateY(-6px);
+}
+
+.qq-answer.selected .qq-answer-index{
+  background: linear-gradient(90deg, var(--gold), rgba(212,175,55,0.85));
+  color: rgba(10,10,10,0.95);
+}
+
+/* footer with next button */
+.qq-footer{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+.qq-next{
+  background: linear-gradient(90deg, var(--azure), var(--azure-dark));
+  color: white;
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 8px 30px rgba(0,168,255,0.14);
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
+}
+
+.qq-next:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.qq-next:not(:disabled):hover{
+  transform: translateY(-3px);
+  box-shadow: 0 16px 45px rgba(0,168,255,0.16);
+}
+
+/* responsive tweaks */
+@media (max-width: 640px){
+  .qq-card{ padding: 18px; border-radius: 12px; }
+  .qq-progress{ width: 140px; }
+  .qq-question{ font-size: 18px; }
+  .qq-answers{ grid-template-columns: 1fr; }
 }

@@ -4,7 +4,7 @@ import { Auth } from "./component/auth/index";
 import "./App.css";
 import { UserContainer } from "./component/user";
 import { QuizStartContainer, QuizQuestionContainer } from "./component/quiz";
-import { QuizEndView } from "./component/quiz/end-quiz";
+import { QuizEndView } from "./component/quiz/shared/end-quiz";
 
 function App() {
   const [count, setCount] = useState(0);

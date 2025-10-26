@@ -1,25 +1,57 @@
+import "./quiz-start.css";
+
+const formatTS = (val) => {
+  if (!val) return "—";
+  if (val._seconds !== undefined) return new Date(val._seconds * 1000).toLocaleString();
+  if (typeof val === "number") return new Date(val).toLocaleString();
+  if (val instanceof Date) return val.toLocaleString();
+  try {
+    return String(val);
+  } catch {
+    return "—";
+  }
+};
+
 export const QuizStartForm = ({ quizData, userName, onUserNameChange, onStart }) => {
   return (
-    <div>
-      <p>{quizData?.title}</p>
-      <p>{quizData?.createdAt?._seconds}</p>
+    <div className="quiz-start-root">
+      <div className="quiz-card">
+        <div className="quiz-header">
+          <span className="emoji">💛</span>
+          <h1 className="quiz-title">{quizData?.title || "Quiz weselny"}</h1>
+        </div>
 
-      <div style={{ marginTop: 16 }}>
-        <label htmlFor="participantName">Your name</label>
-        <br />
-        <input
-          id="participantName"
-          type="text"
-          value={userName}
-          onChange={(e) => onUserNameChange(e.target.value)}
-          placeholder="Imi(e/ona) gościa"
-          style={{ padding: 8, width: "100%", maxWidth: 320, marginTop: 8 }}
-        />
-        <br />
-        <button onClick={onStart} disabled={!userName.trim()} style={{ marginTop: 12, padding: "10px 16px" }}>
-          Start Quiz
-        </button>
+        <p className="quiz-ts">{formatTS(quizData?.createdAt)}</p>
+
+        <div className="quiz-message">
+          <h2 className="welcome">Dołącz do zabawy!</h2>
+          <p className="invite">Zapraszamy do rozwiązania quizu weselnego — sprawdź swoją wiedzę o parze młodej i wygraj nagrody!</p>
+
+          <label htmlFor="participantName" className="label">
+            Twoje/Wasze imiona
+          </label>
+          <input
+            id="participantName"
+            className="input"
+            type="text"
+            value={userName}
+            onChange={(e) => onUserNameChange(e.target.value)}
+            placeholder="Imię gościa"
+            inputMode="text"
+            autoComplete="name"
+          />
+
+          <button className="start-btn" onClick={onStart} disabled={!userName?.trim()}>
+            Rozpocznij quiz
+          </button>
+
+          <p className="thanks-note">Dziękujemy, że bierzesz udział — Twoja obecność wiele znaczy. Powodzenia i miłej zabawy!</p>
+        </div>
       </div>
+
+      <footer className="quiz-footer">
+        <small>Weselny Quiz — przygotowany z miłością 💍</small>
+      </footer>
     </div>
   );
 };
