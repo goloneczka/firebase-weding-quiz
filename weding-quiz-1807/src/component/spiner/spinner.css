@@ -1,0 +1,33 @@
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 188, 212, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--quiz-aqua);
+    animation: spin 0.8s linear infinite;
+}
+
+.spinner-container.small .spinner {
+    width: 24px;
+    height: 24px;
+    border-width: 2px;
+}
+
+.spinner-container.large .spinner {
+    width: 56px;
+    height: 56px;
+    border-width: 4px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
