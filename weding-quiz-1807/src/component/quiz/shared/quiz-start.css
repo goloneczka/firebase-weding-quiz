@@ -1,10 +1,4 @@
-:root {
-    --gold: #d4af37;
-    --aqua: #00bcd4;
-    --bg: #fbfcfd;
-    --card-bg: linear-gradient(135deg, rgba(212, 175, 55, 0.06), rgba(0, 188, 212, 0.03));
-    --text: #073642;
-}
+@import './shared-quiz-styles.css';
 
 * {
     box-sizing: border-box
@@ -18,8 +12,8 @@
     justify-content: center;
     padding: env(safe-area-inset);
     background: radial-gradient(circle at 10% 10%, rgba(0, 188, 212, 0.04), transparent 10%),
-        linear-gradient(180deg, var(--bg), #fff);
-    color: var(--text);
+        linear-gradient(180deg, var(--quiz-bg), #fff);
+    color: var(--quiz-text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     padding: 20px;
 }
@@ -27,7 +21,7 @@
 .quiz-card {
     width: 100%;
     max-width: 420px;
-    background: var(--card-bg);
+    background: var(--quiz-card-bg);
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 14px;
     padding: 20px;
@@ -52,7 +46,7 @@
     margin: 0;
     font-size: 18px;
     font-weight: 700;
-    color: var(--aqua);
+    color: var(--quiz-aqua);
 }
 
 .quiz-ts {
@@ -75,7 +69,7 @@
 .welcome {
     margin: 0;
     font-size: 20px;
-    color: var(--gold);
+    color: var(--quiz-gold);
 }
 
 .invite {
@@ -99,7 +93,7 @@
     border-radius: 10px;
     border: 1px solid rgba(7, 54, 66, 0.08);
     background: #fff;
-    color: var(--text);
+    color: var(--quiz-tex);
     font-size: 15px;
     width: 100%;
     outline: none;
@@ -107,7 +101,7 @@
 }
 
 .input:focus {
-    border-color: var(--aqua);
+    border-color: var(--quiz-aqua);
     box-shadow: 0 6px 18px rgba(0, 188, 212, 0.08);
 }
 
@@ -117,7 +111,7 @@
     border-radius: 10px;
     border: none;
     font-weight: 700;
-    background: linear-gradient(90deg, var(--aqua), rgba(212, 175, 55, 0.15));
+    background: linear-gradient(90deg, var(--quiz-aqua), rgba(212, 175, 55, 0.15));
     color: white;
     cursor: pointer;
     transition: transform .08s ease, opacity .12s;

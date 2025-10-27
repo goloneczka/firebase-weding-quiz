@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./quiz-info.css";
+import { formatTS } from "../../../service/firebase-service";
 
 export const QuizInfo = ({ quizData }) => {
   const toDate = (val) => {
@@ -55,19 +56,6 @@ export const QuizInfo = ({ quizData }) => {
       if (minuteInterval) clearInterval(minuteInterval);
     };
   }, [quizData?.weddingTime]);
-
-  const formatTS = (val) => {
-    if (!val) return "—";
-    // Firestore timestamp shape
-    if (val._seconds !== undefined) return new Date(val._seconds * 1000).toLocaleString();
-    if (typeof val === "number") return new Date(val).toLocaleString();
-    if (val instanceof Date) return val.toLocaleString();
-    try {
-      return String(val);
-    } catch {
-      return "—";
-    }
-  };
 
   return (
     <div className="lu-info-grid">

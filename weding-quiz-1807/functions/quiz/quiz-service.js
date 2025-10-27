@@ -19,14 +19,11 @@ const toDate = (ts) => {
 
 export const getQuizById = async (req) => {
   const docId = req.data;
-  if (!docId) {
-    return { error: "Missing document ID (use ?id=DOC_ID)" };
-  }
 
   const docRef = db.collection("quizz").doc(docId);
   const docSnap = await docRef.get();
   if (!docSnap.exists) {
-    return { error: "Document not found" };
+    throw new HttpsError("failed-precondition", "Quiz not found");
   }
 
   const quizData = docSnap.data();
@@ -46,14 +43,10 @@ export const getQuizByOwner = async (req) => {
   }
 
   const ownerEmail = req.data;
-  if (!ownerEmail) {
-    return { error: "Missing document ID (use ?id=DOC_ID)" };
-  }
-
   const quizRef = db.collection("quizz").where("owner", "==", ownerEmail);
   const querySnap = await quizRef.get();
   if (querySnap.empty) {
-    return { error: "Document not found" };
+    throw new HttpsError("failed-precondition", "Quiz not found");
   }
 
   // If you expect only one quiz per owner, just take the first doc
@@ -97,6 +90,7 @@ export const getQuizQuestionById = async (req) => {
     id: doc.id,
     ...rest,
     imageOrBucketPath,
+    questionProgress: (no / quizData.questionCounter) * 100,
   };
 };
 

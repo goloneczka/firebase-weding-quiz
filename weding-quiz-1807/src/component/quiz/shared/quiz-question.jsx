@@ -17,8 +17,8 @@ export const QuizQuestionShared = ({ questionData, selected, handleSelect, handl
                 <h2>
                   Pytanie <span className="qq-no">{questionData.no}</span>
                 </h2>
-                <div className="qq-progress" role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">
-                  <div className="qq-progress-bar" style={{ width: `${progress}%` }} />
+                <div className="qq-progress" role="progressbar" aria-valuenow={questionData.questionProgress} aria-valuemin="0" aria-valuemax="100">
+                  <div className="qq-progress-bar" style={{ width: `${questionData.questionProgress}%` }} />
                 </div>
               </div>
             </div>

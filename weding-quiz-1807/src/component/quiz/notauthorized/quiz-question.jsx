@@ -6,12 +6,14 @@ import { storageService } from "../../../service/local-storage-service";
 import { QuizQuestionShared } from "../shared/quiz-question";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../../config/firebase-config";
+import { Spinner } from "../../spiner/spinner";
 
 export const QuizQuestionNotLogged = () => {
   const { uuid, page } = useParams();
   const navigate = useNavigate();
   const startTimeRef = useRef(null);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [questionData, setQuestionData] = useState({});
   const [selected, setSelected] = useState(null);
 
@@ -45,14 +47,19 @@ export const QuizQuestionNotLogged = () => {
       setSelected(null);
     }
 
+    setIsLoading(true);
     httpsCallable(
       getFunctions(),
       "getQuizQuestion"
-    )({ quizId: uuid, questionNumber: page }).then((restult) => {
-      setQuestionData(restult.data);
-      startTimeRef.current = Date.now();
-      fetchCustomImage(restult.data.imageOrBucketPath);
-    });
+    )({ quizId: uuid, questionNumber: page })
+      .then((restult) => {
+        setQuestionData(restult.data);
+        startTimeRef.current = Date.now();
+        fetchCustomImage(restult.data.imageOrBucketPath);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [uuid, page]);
 
   const handleSelect = (idx) => setSelected(idx);
@@ -80,12 +87,18 @@ export const QuizQuestionNotLogged = () => {
   };
 
   return (
-    <QuizQuestionShared
-      questionData={questionData}
-      selected={selected}
-      handleSelect={handleSelect}
-      handleNextQuestion={handleNextQuestion}
-      bgPhotoUrl={bgPhotoUrl}
-    />
+    <div>
+      {isLoading ? (
+        <Spinner size="medium" />
+      ) : (
+        <QuizQuestionShared
+          questionData={questionData}
+          selected={selected}
+          handleSelect={handleSelect}
+          handleNextQuestion={handleNextQuestion}
+          bgPhotoUrl={bgPhotoUrl}
+        />
+      )}
+    </div>
   );
 };
