@@ -28,6 +28,7 @@ export const QuizStartNotLogged = () => {
       return;
     }
 
+    storageService.clearQuiz();
     storageService.setParticipant(trimmed);
     navigate(`/quiz/${uuid}/page/1`);
   };

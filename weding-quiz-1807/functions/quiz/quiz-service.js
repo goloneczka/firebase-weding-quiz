@@ -37,7 +37,7 @@ export const getQuizById = async (req) => {
   return { id: docSnap.id, ...quizData };
 };
 
-export const getQuizByOwner = async (req) => {
+export const getQuizByOwnerWithAuth = async (req) => {
   if (!req.auth || !req.auth.uid) {
     throw new HttpsError("failed-precondition", "The function must be called while authenticated.");
   }
@@ -94,7 +94,7 @@ export const getQuizQuestionById = async (req) => {
   };
 };
 
-export const submitQuiz = async (req) => {
+export const submitQuizFun = async (req) => {
   const docId = req.data.quizId;
   const answers = req.data.answers;
   let points = 0;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./quiz-question.css";
 
-export const QuizQuestionShared = ({ questionData, selected, handleSelect, handleNextQuestion, bgPhotoUrl, progress = 0 }) => {
+export const QuizQuestionShared = ({ questionData, selected, handleSelect, handleNextQuestion, bgPhotoUrl }) => {
   const answers = questionData.answers || [];
 
   return (

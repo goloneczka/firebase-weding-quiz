@@ -7,11 +7,10 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-const { setGlobalOptions } = require("firebase-functions");
-const { onRequest, onCall } = require("firebase-functions/https");
-const logger = require("firebase-functions/logger");
+import { setGlobalOptions } from "firebase-functions";
+import { onCall } from "firebase-functions/https";
 
-const { getQuizById, getQuizByOwner, getQuizQuestionById, submitQuiz } = require("./quiz/quiz-service");
+import { getQuizById, getQuizByOwnerWithAuth, getQuizQuestionById, submitQuizFun } from "./quiz/quiz-service.js";
 
 // For cost control, you can set the maximum number of containers that can be
 // running at the same time. This helps mitigate the impact of unexpected
@@ -28,18 +27,18 @@ setGlobalOptions({ maxInstances: 10 });
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
-exports.getQuiz = onCall(async (req) => {
+export const getQuiz = onCall(async (req) => {
   return await getQuizById(req);
 });
 
-exports.getQuizByOwner = onCall(async (req) => {
-  return await getQuizByOwner(req);
+export const getQuizByOwner = onCall(async (req) => {
+  return await getQuizByOwnerWithAuth(req);
 });
 
-exports.getQuizQuestion = onCall(async (req) => {
+export const getQuizQuestion = onCall(async (req) => {
   return await getQuizQuestionById(req);
 });
 
-exports.submitQuiz = onCall(async (req) => {
-  return await submitQuiz(req);
+export const submitQuiz = onCall(async (req) => {
+  return await submitQuizFun(req);
 });
