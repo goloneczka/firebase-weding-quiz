@@ -1,48 +1,48 @@
 export const storageService = {
   getQuizAnswersOrEmpty() {
-    return JSON.parse(localStorage.getItem("quizAnswers") || "{}");
+    return JSON.parse(sessionStorage.getItem("quizAnswers") || "{}");
   },
 
   setQuizAnswers(answers) {
-    localStorage.setItem("quizAnswers", JSON.stringify(answers));
+    sessionStorage.setItem("quizAnswers", JSON.stringify(answers));
   },
 
   validateCurrentQuestion(questionNumber) {
-    const isUser = !!localStorage.getItem("participant");
+    const isUser = !!sessionStorage.getItem("participant");
 
-    const answers = JSON.parse(localStorage.getItem("quizAnswers") || "{}");
+    const answers = JSON.parse(sessionStorage.getItem("quizAnswers") || "{}");
     const isPreviousAnswer = !!answers[questionNumber - 1];
 
     return isUser && (isPreviousAnswer || questionNumber == 1);
   },
 
   setParticipant(name) {
-    localStorage.setItem("participant", name);
+    sessionStorage.setItem("participant", name);
   },
 
   getParticipant() {
-    return localStorage.getItem("participant");
+    return sessionStorage.getItem("participant");
   },
 
   clearQuiz() {
-    localStorage.removeItem("quizAnswers");
-    localStorage.removeItem("participant");
+    sessionStorage.removeItem("quizAnswers");
+    sessionStorage.removeItem("participant");
   },
 
   getAuthUser() {
-    return JSON.parse(localStorage.getItem("auth"));
+    return JSON.parse(sessionStorage.getItem("auth"));
   },
 
   validateUserAuth() {
-    return !!localStorage.getItem("auth");
+    return !!sessionStorage.getItem("auth");
   },
 
   setUserAuth(user) {
-    localStorage.setItem("auth", JSON.stringify(user));
+    sessionStorage.setItem("auth", JSON.stringify(user));
   },
 
   clearUserAuth() {
-    localStorage.removeItem("auth");
+    sessionStorage.removeItem("auth");
   },
 };
 

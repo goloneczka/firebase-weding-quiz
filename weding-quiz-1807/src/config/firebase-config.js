@@ -24,7 +24,15 @@ await setPersistence(auth, browserSessionPersistence);
 export const provider = new GoogleAuthProvider();
 
 if (process.env.NODE_ENV === "development") {
-  connectFunctionsEmulator(getFunctions(app), "localhost", 5001);
+  connectFunctionsEmulator(getFunctions(app), "localhost", 5001); //192.168.18.7
 }
 
 export const storage = getStorage(app);
+
+// do firebase.json
+// "emulators": {
+//   "functions": {
+//     "host": "0.0.0.0",
+//     "port": 5001
+//   }
+// },

@@ -41,7 +41,7 @@ export const QuizResultsView = ({ answers }) => {
     <div className="qr-root">
       <header className="qr-header">
         <h1>Weding Quiz — Results</h1>
-        <p className="qr-sub">Thank you for playing — leaderboard (mobile friendly)</p>
+        <p className="qr-sub">leaderboard</p>
       </header>
 
       <ul className="qr-list" role="list">

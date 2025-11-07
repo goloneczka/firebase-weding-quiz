@@ -2,6 +2,8 @@
 
 .lu-root {
     min-height: 100vh;
+    max-height: 100vh;
+        overflow: auto;
     background: linear-gradient(180deg, #fff7fb 0%, #fffaf6 100%);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     color: #3a2b4a;
@@ -121,6 +123,14 @@
 
 
 /* responsive */
+@media (max-width: 639px) {
+.lu-user-mail {
+        max-width: 20ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
 @media (min-width: 640px) {
     .lu-root {
         padding: 20px;

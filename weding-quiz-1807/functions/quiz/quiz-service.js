@@ -85,7 +85,7 @@ export const getQuizQuestionById = async (req) => {
   }
   const doc = querySnapshot.docs[0];
   const imageOrBucketPath = await getRandomImageNameByBucket(quizData.storage);
-  const { quiz, ...rest } = doc.data();
+  const { quiz, correctAnswer, ...rest } = doc.data();
   return {
     id: doc.id,
     ...rest,
