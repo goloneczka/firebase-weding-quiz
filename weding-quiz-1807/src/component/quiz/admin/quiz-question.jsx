@@ -6,6 +6,7 @@ import { storageService } from "../../../service/local-storage-service";
 import { QuizQuestionShared } from "../shared/quiz-question";
 import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../../config/firebase-config";
+import { Spinner } from "../../spiner/spinner";
 
 import "./admin-question.css";
 
@@ -14,22 +15,38 @@ export const QuizQuestionLogged = () => {
   const navigate = useNavigate();
   const startTimeRef = useRef(null);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [questionData, setQuestionData] = useState({});
   const [selected, setSelected] = useState(null);
 
-  const [bgPhotoUrl, setBgPhotoUrl] = useState("");
+  const [bgPhotoUrl, setBgPhotoUrl] = useState(null);
+
+  const setImageState = (bgUrl) => {
+    const img = new Image();
+    img.src = bgUrl;
+    img.onload = () => {
+      setBgPhotoUrl(bgUrl);
+      setIsLoading(false);
+    };
+  };
 
   const fetchCustomImage = (imageOrBucketPath) => {
     if (imageOrBucketPath.endsWith("/")) {
       const basePath = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL;
       const bgUrl = `${basePath}/image/${imageOrBucketPath}default.png`;
-      setBgPhotoUrl(bgUrl);
+      setImageState(bgUrl);
       return;
     }
     const imageRef = ref(storage, imageOrBucketPath);
-    getDownloadURL(imageRef).then((url) => {
-      setBgPhotoUrl(url);
-    });
+    getDownloadURL(imageRef)
+      .then((bgUrl) => {
+        setImageState(bgUrl);
+      })
+      .catch((_) => {
+        const basePath = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL;
+        const bgUrl = `${basePath}/image/${imageOrBucketPath}default.png`;
+        setImageState(bgUrl);
+      });
   };
 
   useEffect(() => {
@@ -47,6 +64,7 @@ export const QuizQuestionLogged = () => {
       setSelected(null);
     }
 
+    setIsLoading(true);
     httpsCallable(
       getFunctions(),
       "getQuizQuestion"
@@ -77,14 +95,20 @@ export const QuizQuestionLogged = () => {
 
   return (
     <div className="admin-container">
-      <div className="admin-flag">Twoje odpowiedzi nie będą zapisane</div>
-      <QuizQuestionShared
-        questionData={questionData}
-        selected={selected}
-        handleSelect={handleSelect}
-        handleNextQuestion={handleNextQuestion}
-        bgPhotoUrl={bgPhotoUrl}
-      />
+      {isLoading ? (
+        <Spinner size="medium" />
+      ) : (
+        <div>
+          <div className="admin-flag">Twoje odpowiedzi nie będą zapisane</div>
+          <QuizQuestionShared
+            questionData={questionData}
+            selected={selected}
+            handleSelect={handleSelect}
+            handleNextQuestion={handleNextQuestion}
+            bgPhotoUrl={bgPhotoUrl}
+          />
+        </div>
+      )}
     </div>
   );
 };

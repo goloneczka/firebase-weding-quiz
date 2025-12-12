@@ -17,19 +17,34 @@ export const QuizQuestionNotLogged = () => {
   const [questionData, setQuestionData] = useState({});
   const [selected, setSelected] = useState(null);
 
-  const [bgPhotoUrl, setBgPhotoUrl] = useState("");
+  const [bgPhotoUrl, setBgPhotoUrl] = useState(null);
+
+  const setImageState = (bgUrl) => {
+    const img = new Image();
+    img.src = bgUrl;
+    img.onload = () => {
+      setBgPhotoUrl(bgUrl);
+      setIsLoading(false);
+    };
+  };
 
   const fetchCustomImage = (imageOrBucketPath) => {
     if (imageOrBucketPath.endsWith("/")) {
       const basePath = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL;
       const bgUrl = `${basePath}/image/${imageOrBucketPath}default.png`;
-      setBgPhotoUrl(bgUrl);
+      setImageState(bgUrl);
       return;
     }
     const imageRef = ref(storage, imageOrBucketPath);
-    getDownloadURL(imageRef).then((url) => {
-      setBgPhotoUrl(url);
-    });
+    getDownloadURL(imageRef)
+      .then((bgUrl) => {
+        setImageState(bgUrl);
+      })
+      .catch((_) => {
+        const basePath = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL;
+        const bgUrl = `${basePath}/image/${imageOrBucketPath}default.png`;
+        setImageState(bgUrl);
+      });
   };
 
   useEffect(() => {
@@ -48,18 +63,15 @@ export const QuizQuestionNotLogged = () => {
     }
 
     setIsLoading(true);
+
     httpsCallable(
       getFunctions(),
       "getQuizQuestion"
-    )({ quizId: uuid, questionNumber: page })
-      .then((restult) => {
-        setQuestionData(restult.data);
-        startTimeRef.current = Date.now();
-        fetchCustomImage(restult.data.imageOrBucketPath);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    )({ quizId: uuid, questionNumber: page }).then((restult) => {
+      setQuestionData(restult.data);
+      startTimeRef.current = Date.now();
+      fetchCustomImage(restult.data.imageOrBucketPath);
+    });
   }, [uuid, page]);
 
   const handleSelect = (idx) => setSelected(idx);
@@ -73,10 +85,12 @@ export const QuizQuestionNotLogged = () => {
     const user = storageService.getParticipant();
 
     if (questionData.isLast) {
+      setIsLoading(true);
       return httpsCallable(
         getFunctions(),
         "submitQuiz"
       )({ quizId: uuid, answers: prevAnswers, user }).finally(() => {
+        setIsLoading(false);
         navigate(`/quiz/${uuid}/end`);
         storageService.clearQuiz();
         return;
