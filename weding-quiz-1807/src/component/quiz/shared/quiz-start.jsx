@@ -10,11 +10,14 @@ export const QuizStartForm = ({ quizData, userName, onUserNameChange, onStart })
           <h1 className="quiz-title">{quizData?.title || "Quiz weselny"}</h1>
         </div>
 
-        <p className="quiz-ts">{formatTS(quizData?.createdAt)}</p>
+        <p className="quiz-ts">{formatTS(quizData?.weddingTime)}</p>
 
         <div className="quiz-message">
-          <h2 className="welcome">Dołącz do zabawy!</h2>
-          <p className="invite">Zapraszamy do rozwiązania quizu weselnego — sprawdź swoją wiedzę o parze młodej i wygraj nagrody!</p>
+          <h2 className="welcome">Dołącz do zabawy !</h2>
+          <p className="invite">
+            Zapraszamy do rozwiązania quizu weselnego o parze młodej. Wyniki zostaną ogłoszone po oczepinach, dla zwycięzcy przewidziana jest nagroda.
+            Całość zajmie tylko kilka minut.
+          </p>
 
           <label htmlFor="participantName" className="label">
             Twoje/Wasze imiona

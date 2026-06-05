@@ -12,7 +12,7 @@ export const QuizEndView = () => {
   useEffect(() => {
     httpsCallable(
       getFunctions(),
-      "getQuiz"
+      "getQuiz",
     )(uuid).then((restult) => {
       setQuizData(restult.data);
     });
@@ -26,13 +26,12 @@ export const QuizEndView = () => {
           <h1 className="quiz-title">{quizData.title || "Quiz weselny"}</h1>
         </div>
 
-        <p className="quiz-ts">{formatTS(quizData?.createdAt)}</p>
+        <p className="quiz-ts">{formatTS(quizData?.weddingTime)}</p>
 
         <div className="quiz-message">
-          <h2 className="thanks">Dziękujemy za udział!</h2>
+          <h2 className="thanks">Dziękujemy za udział !</h2>
           <p className="thanks-details">
-            Dziękujemy za rozwiązanie quizu weselnego — Twoje odpowiedzi zostały zapisane. Życzymy miłej zabawy, powodzenia w losowaniu nagród i
-            wspaniałego świętowania!
+            Dziękujemy za rozwiązanie quizu weselnego — Twoje odpowiedzi zostały zapisane. Życzymy dalszej miłej zabawy.
           </p>
         </div>
       </div>

@@ -80,12 +80,13 @@ export const getQuizQuestionById = async (req) => {
   const start = toDate(quizData.startTime);
   const end = toDate(quizData.endTime);
   const now = new Date();
+
   if (!(req.auth && req.auth.token.email === quizData.owner) && (!start || !end || now < start || now > end)) {
     throw new HttpsError("failed-precondition", "The function must be called while authenticated or during the quiz active time window.");
   }
   const doc = querySnapshot.docs[0];
-  const imageOrBucketPath = await getRandomImageNameByBucket(quizData.storage);
   const { quiz, correctAnswer, ...rest } = doc.data();
+  const imageOrBucketPath = await getRandomImageNameByBucket(quizData.storage, rest.answers.length);
   return {
     id: doc.id,
     ...rest,

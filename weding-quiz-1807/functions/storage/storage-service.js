@@ -2,9 +2,10 @@ import { admin } from "../firebase.js";
 
 const storage = admin.storage();
 
-export const getRandomImageNameByBucket = async (bucketName) => {
+export const getRandomImageNameByBucket = async (bucketName, answersCount) => {
   const bucketPath = bucketName + "/";
-  if (Math.random() < 0.6) return bucketPath;
+  const treshold = 0.4 + (0.5 - answersCount * 0.1);
+  if (Math.random() > treshold) return bucketPath;
 
   const [files] = await storage.bucket().getFiles({ prefix: bucketPath });
   const fileNames = files.map((f) => f.name).filter((name) => name !== bucketPath);
