@@ -17,6 +17,15 @@ If you are developing a production application, we recommend using TypeScript wi
 
 firebase emulators:start, npm run dev
 
-npm run dev -- --host 0.0.0.0 firebase emulators:start --host 0.0.0.0
+Ruch lokalny w sieci IP:
 
-firebase deploy --only functions firebase deploy --only hosting
+1. w package.json jest "vite --host=0.0.0.0"
+2. w firebase-config.js jest connectFunctionsEmulator(getFunctions(app), "192.168.18.7", 5001);
+3. w firebase.json w root jest "emulators": {
+   "functions": {
+   "host": "0.0.0.0",
+   "port": 5001
+   }
+   },
+
+firebase deploy --only functions, npm run build, firebase deploy --only hosting

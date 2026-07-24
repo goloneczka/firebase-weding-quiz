@@ -10,7 +10,7 @@
 import { setGlobalOptions } from "firebase-functions";
 import { onCall } from "firebase-functions/https";
 
-import { getQuizById, getQuizByOwnerWithAuth, getQuizQuestionById, submitQuizFun } from "./quiz/quiz-service.js";
+import { getQuizById, getQuizByOwnerWithAuth, getQuizQuestionById, submitQuizFun, getAllQuizImageNames } from "./quiz/quiz-service.js";
 
 // For cost control, you can set the maximum number of containers that can be
 // running at the same time. This helps mitigate the impact of unexpected
@@ -33,6 +33,10 @@ export const getQuiz = onCall(async (req) => {
 
 export const getQuizByOwner = onCall(async (req) => {
   return await getQuizByOwnerWithAuth(req);
+});
+
+export const getQuizImageNames = onCall(async (req) => {
+  return await getAllQuizImageNames(req);
 });
 
 export const getQuizQuestion = onCall(async (req) => {

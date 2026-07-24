@@ -1,0 +1,75 @@
+.quiz-start-root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: env(safe-area-inset);
+    background: radial-gradient(circle at 10% 10%, rgba(0, 188, 212, 0.04), transparent 10%),
+        linear-gradient(180deg, var(--quiz-bg), #fff);
+    color: var(--quiz-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    padding: 20px;
+    gap: 18px;
+    text-align: center;
+}
+
+.greeting-text {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    max-width: 740px;
+    line-height: 1.4;
+    animation: fadeText 2s ease-in-out infinite;
+}
+
+@keyframes fadeText {
+    0%, 100% {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    10%, 90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.qq-bg {
+    min-height: 100vh;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.quiz-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 50vh;
+    max-width: 420px;
+    background: var(--quiz-card-bg);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+    text-align: center;
+}
+
+.thanks-note {
+    margin: 0;
+    font-size: 13px;
+    color: rgba(7, 54, 66, 0.7);
+    padding-top: 6px;
+    margin-top: auto;
+}

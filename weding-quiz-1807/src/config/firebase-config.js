@@ -28,11 +28,3 @@ if (process.env.NODE_ENV === "development") {
 }
 
 export const storage = getStorage(app);
-
-// do firebase.json
-// "emulators": {
-//   "functions": {
-//     "host": "0.0.0.0",
-//     "port": 5001
-//   }
-// },

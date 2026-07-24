@@ -1,6 +1,6 @@
 import { HttpsError } from "firebase-functions/https";
 import { admin } from "../firebase.js";
-import { getRandomImageNameByBucket } from "../storage/storage-service.js";
+import { getRandomImageNameByBucket, getAllImageNamesByBucket } from "../storage/storage-service.js";
 
 const db = admin.firestore();
 
@@ -65,6 +65,16 @@ export const getQuizByOwnerWithAuth = async (req) => {
   });
 
   return { quiz: { id: quizSnap.id, ...quizData }, answers: answersData };
+};
+
+export const getAllQuizImageNames = async (req) => {
+  const quizzRef = db.collection("quizz").doc(req.data);
+
+  const docQuizSnap = await quizzRef.get();
+  const quizData = docQuizSnap.data();
+
+  console.log("Getting quiz image names for quizId:", quizData.storage);
+  return await getAllImageNamesByBucket(quizData.storage);
 };
 
 export const getQuizQuestionById = async (req) => {
