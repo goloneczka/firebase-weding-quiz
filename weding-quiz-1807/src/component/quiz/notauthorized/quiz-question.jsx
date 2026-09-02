@@ -8,6 +8,8 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../../../config/firebase-config";
 import { Spinner } from "../../spiner/spinner";
 
+import { hexToRgb } from "../../../service/firebase-service";
+
 export const QuizQuestionNotLogged = () => {
   const { uuid, page } = useParams();
   const navigate = useNavigate();
@@ -63,16 +65,31 @@ export const QuizQuestionNotLogged = () => {
     }
 
     setIsLoading(true);
+    loadThemeColorsIfNeeded();
 
     httpsCallable(
       getFunctions(),
-      "getQuizQuestion"
+      "getQuizQuestion",
     )({ quizId: uuid, questionNumber: page }).then((restult) => {
       setQuestionData(restult.data);
       startTimeRef.current = Date.now();
       fetchCustomImage(restult.data.imageOrBucketPath);
     });
   }, [uuid, page]);
+
+  const loadThemeColorsIfNeeded = () => {
+    if (!document.documentElement.style.getPropertyValue("--quiz-primary")) {
+      const quizColors = storageService.getQuizColors();
+
+      if (quizColors.p && quizColors.s) {
+        const root = document.documentElement;
+        root.style.setProperty("--quiz-primary", quizColors.p);
+        root.style.setProperty("--quiz-primary-rgb", hexToRgb(quizColors.p));
+        root.style.setProperty("--quiz-secondary", quizColors.s);
+        root.style.setProperty("--quiz-secondary-rgb", hexToRgb(quizColors.s));
+      }
+    }
+  };
 
   const handleSelect = (idx) => setSelected(idx);
 
@@ -88,7 +105,7 @@ export const QuizQuestionNotLogged = () => {
       setIsLoading(true);
       return httpsCallable(
         getFunctions(),
-        "submitQuiz"
+        "submitQuiz",
       )({ quizId: uuid, answers: prevAnswers, user }).finally(() => {
         setIsLoading(false);
         navigate(`/quiz/${uuid}/end`);

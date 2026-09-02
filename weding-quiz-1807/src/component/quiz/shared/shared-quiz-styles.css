@@ -1,6 +1,5 @@
 :root {
-    --quiz-gold: #d4af37;
-    --quiz-aqua: #00bcd4;
+    --quiz-secondary-dark: #874485;
     --quiz-bg: #fbfcfd;
     --quiz-card-bg: linear-gradient(135deg, rgba(212, 175, 55, 0.06), rgba(0, 188, 212, 0.03));
     --quiz-text: #073642;

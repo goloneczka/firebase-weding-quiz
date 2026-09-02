@@ -6,6 +6,8 @@ import { storageService } from "../../../service/local-storage-service";
 import { QuizStartForm } from "../shared/quiz-start";
 import { QuizStartLoader } from "../shared/quiz-start-loader";
 
+import { hexToRgb } from "../../../service/firebase-service";
+
 export const QuizStartNotLogged = () => {
   const { uuid } = useParams();
   const navigate = useNavigate();
@@ -19,9 +21,20 @@ export const QuizStartNotLogged = () => {
       getFunctions(),
       "getQuiz",
     )(uuid).then((restult) => {
+      loadThemeColors(restult.data);
       setQuizData(restult.data);
     });
   }, [uuid]);
+
+  const loadThemeColors = (quizData) => {
+    const root = document.documentElement;
+
+    root.style.setProperty("--quiz-primary", quizData.primaryColor);
+    root.style.setProperty("--quiz-primary-rgb", hexToRgb(quizData.primaryColor));
+
+    root.style.setProperty("--quiz-secondary", quizData.secondaryColor);
+    root.style.setProperty("--quiz-secondary-rgb", hexToRgb(quizData.secondaryColor));
+  };
 
   const handleStart = () => {
     const trimmed = userName.trim();
@@ -32,6 +45,8 @@ export const QuizStartNotLogged = () => {
 
     storageService.clearQuiz();
     storageService.setParticipant(trimmed);
+    storageService.setQuizColors({ p: quizData.primaryColor, s: quizData.secondaryColor });
+
     setIsQuizStarted(true);
   };
 

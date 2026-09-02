@@ -24,9 +24,18 @@ export const storageService = {
     return sessionStorage.getItem("participant");
   },
 
+  setQuizColors(quizData) {
+    sessionStorage.setItem("quizColors", JSON.stringify(quizData));
+  },
+
+  getQuizColors() {
+    return JSON.parse(sessionStorage.getItem("quizColors") || "{}");
+  },
+
   clearQuiz() {
     sessionStorage.removeItem("quizAnswers");
     sessionStorage.removeItem("participant");
+    sessionStorage.removeItem("quizColors");
   },
 
   getAuthUser() {

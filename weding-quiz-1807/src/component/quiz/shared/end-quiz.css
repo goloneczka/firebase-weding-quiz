@@ -1,8 +1,8 @@
 @import './shared-quiz-styles.css';
 
 :root {
-    --end-gold: var(--quiz-gold);
-    --end-aqua: var(--quiz-aqua);
+    --end-primary: var(--quiz-primary);
+    --end-secondary: var(--quiz-secondary);
     --end-bg: var(--quiz-bg);
     --end-card-bg: var(--quiz-card-bg);
     --end-text: var(--quiz-text);
@@ -54,7 +54,7 @@
     margin: 0;
     font-size: 18px;
     font-weight: 700;
-    color: var(--end-aqua);
+    color: var(--end-secondary);
 }
 
 .quiz-ts {
@@ -64,7 +64,7 @@
 }
 
 .quiz-message {
-    background: linear-gradient(180deg, rgba(0, 188, 212, 0.02), rgba(212, 175, 55, 0.02));
+    background: linear-gradient(180deg, rgba(var(--end-secondary), 0.02), rgba(var(--end-primary), 0.02));
     padding: 14px;
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.03);
@@ -73,7 +73,7 @@
 .thanks {
     margin: 0 0 8px;
     font-size: 20px;
-    color: var(--end-gold);
+    color: var(--end-primary);
 }
 
 .thanks-details {
